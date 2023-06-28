@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*擴充專案的全站樣式*/
+  html {
+    font-family: Montserrat, "Noto Sans", system-ui, sans-serif;
+  }
+  body {
+    @apply bg-[#C9E5F7];
+  }
+  a {
+    @apply block;
+  }
+}
+
+@layer components {
+  /* 自組元件 */
+  .btn {
+    @apply inline-block text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:outline-none focus:ring-cyan-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer;
+  }
+
+  .btn-outline {
+    @apply ring-1 ring-inset ring-white bg-transparent hover:ring-cyan hover:text-cyan-800 hover:scale-100;
+  }
+}
