@@ -1,10 +1,13 @@
 import { useState } from 'react'
+// Components
 import Header from './components/Header'
 import ImageLinkForm from './components/ImageLinkForm'
 import FaceRecognition from './components/FaceRecognition'
 import Rank from './components/Rank'
 import Login from './components/Login'
 import Signup from './components/Signup'
+import { uploadImgApi } from './utils/api'
+// APIs
 
 function App() {
   const [input, setInput] = useState('')
@@ -12,6 +15,21 @@ function App() {
   const [boxes, setBoxes] = useState([])
   const [route, setRoute] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState({
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joinedAt: ''
+  })
+
+  const loadUser = (data) => {
+    setUser(data)
+  }
+
+  // fetch('http://localhost:3000')
+  //   .then( response => response.json())
+  //   .then(console.log)
 
   const calculateFaceLocation = (data) => {
     const calafaiFaceBoxes = data.outputs[0].data.regions.map( box => box.region_info.bounding_box );
@@ -39,7 +57,7 @@ function App() {
     const PAT = '377c93c35a8c4382979594bff49d0c24';//'22b8073894304dcba77964943fa77a37';
     const USER_ID = 'yachuh';       
     const APP_ID = 'react-face-detection';
-    const MODEL_ID = 'face-detection';   
+    const MODEL_ID = 'face-detection';
     const IMAGE_URL = imageUrl;
 
     const raw = JSON.stringify({
@@ -74,12 +92,32 @@ function App() {
     setInput(e.target.value)
   }
 
-  const onButtonSubmit = () => {
+  const onPictureSubmit = async () => {
     setImageUrl(input)
-    console.log('imageUrl@submit:::', imageUrl)
     fetch('https://api.clarifai.com/v2/models/' + 'face-detection' + '/outputs', returnClarafaiRequestOptions(input))
-        .then(response => response.json())
-        .then(result => displayFacebox(calculateFaceLocation(result)))
+        .then(async response => response.json())
+        .then(result => {
+          if (result) {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            const raw = JSON.stringify({
+              "id": user.id
+            });
+
+            const requestOptions = {
+              method: 'PUT',
+              headers: myHeaders,
+              body: raw,
+              redirect: 'follow'
+            };
+            fetch('http://localhost:3000/image', requestOptions)
+            .then(response => response.json())
+            .then(count => setUser({...user, entries: count}))
+            .then(console.log(user))
+          }
+          displayFacebox(calculateFaceLocation(result))
+        })
         .catch(error => console.log('error', error));
   }
 
@@ -100,16 +138,16 @@ function App() {
           route === 'home'
           ? <div>
               <h2 className="text-3xl text-center font-bold my-2">Face Detector Tool</h2>
-              <Rank />
+              <Rank name={user.name} entries={user.entries}/>
               <ImageLinkForm 
                 onInputChange={onInputChange} 
-                onButtonSubmit={onButtonSubmit}
+                onPictureSubmit={onPictureSubmit}
               />
               { imageUrl ? <FaceRecognition imageUrl={imageUrl} boxes={boxes} /> : null }
             </div>
           : (
             route === 'login' 
-            ? <Login onRouteChange={onRouteChange} /> 
+            ? <Login loadUser={loadUser} onRouteChange={onRouteChange} /> 
             : <Signup onRouteChange={onRouteChange}/>
           )
         }

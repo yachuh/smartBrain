@@ -1,9 +1,9 @@
-const Rank = () => {
+const Rank = ({ name, entries }) => {
   return(
     <>
       <div className="text-center my-4">
-        <p>{'Andrei, your current rank is'}</p>
-        <p className="text-2xl font-semibold">{'#5'}</p>
+        <p>{`${name}, your current entry count is`}</p>
+        <p className="text-2xl font-semibold">{entries}</p>
       </div>
     </>
   )

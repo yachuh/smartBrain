@@ -1,4 +1,4 @@
-const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
+const ImageLinkForm = ({ onInputChange, onPictureSubmit }) => {
   return(
     <div className="text-center">
       <p>This magic brain willl detect faces in your picture. Give it a try!</p>
@@ -17,7 +17,7 @@ const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
         <button
           type="submit"
           className="btn"
-          onClick={onButtonSubmit}
+          onClick={onPictureSubmit}
         >
           Detect
         </button>
