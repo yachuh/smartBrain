@@ -1,4 +1,38 @@
-const Login = ({ onRouteChange }) => {
+import { useState } from "react"
+import { loginApi } from "../utils/api"
+
+const Login = ({ onRouteChange, loadUser }) => {
+  const [loginEmail, setLoginEmail] = useState('')
+  const [loginPassword, setLoginPassword] = useState('')
+
+  const onEmailChange = (e) => {
+    setLoginEmail(e.target.value)
+  }
+
+  const onPasswordChange = (e) => {
+    setLoginPassword(e.target.value)
+  }
+
+  const onLoginSubmit = async () => {
+    const loginData = {
+      email: loginEmail,
+      password: loginPassword
+    }
+    try {
+      const { isSuccess, message, user } = await loginApi(loginData)
+      if(!isSuccess){
+        console.log(message)
+        return
+      }
+      if(user.id){
+        loadUser(user)
+        onRouteChange('home')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return(
     <>
       <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 mx-auto">
@@ -22,6 +56,7 @@ const Login = ({ onRouteChange }) => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@company.com"
                 required=""
+                onChange={(e) => onEmailChange(e) }
               />
             </div>
             <div>
@@ -38,12 +73,13 @@ const Login = ({ onRouteChange }) => {
                 placeholder="••••••••"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required=""
+                onChange={(e) => {onPasswordChange(e)}}
               />
             </div>
             <button
               type="submit"
               className="w-full btn"
-              onClick={() => onRouteChange('home')}
+              onClick={() => onLoginSubmit()}
             >
               Login
             </button>
