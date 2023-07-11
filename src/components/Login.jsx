@@ -20,11 +20,11 @@ const Login = ({ onRouteChange, loadUser }) => {
     }
     try {
       const { isSuccess, message, user } = await loginApi(loginData)
-      if(!isSuccess){
+      if (!isSuccess) {
         console.log(message)
         return
       }
-      if(user.id){
+      if (user.id) {
         loadUser(user)
         onRouteChange('home')
       }
