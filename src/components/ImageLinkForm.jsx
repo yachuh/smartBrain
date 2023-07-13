@@ -10,10 +10,6 @@ const ImageLinkForm = ({ onInputChange, onPictureSubmit }) => {
             required=""
             onChange={onInputChange}
           />
-        {/* <a 
-          className="py-2 px-8 bg-blue-950 rounded-md text-white hover:bg-cyan-700 hover:shadow-md cursor-pointer" 
-          onClick={onButtonSubmit}>Detect
-        </a> */}
         <button
           type="submit"
           className="btn"
