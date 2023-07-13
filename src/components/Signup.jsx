@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { signupApi } from "../utils/api"
 
-const Signup = ({ onRouteChange }) => {
+const Signup = ({ onRouteChange, loadUser }) => {
   const [userData, setUserData] = useState({
     name: '',
     email: '',
@@ -20,12 +20,13 @@ const Signup = ({ onRouteChange }) => {
 
   const onSignupSubmit = async () => {
     try {
-      const { isSuccess, message, data } = await signupApi(userData)
-      if(!isSuccess){
+      const { isSuccess, message, data} = await signupApi(userData)
+      if (!isSuccess) {
         console.log(message)
         return
       }
       console.log(data)
+      loadUser(data)
       onRouteChange('home')
     } catch (error) {
       console.log(error)
