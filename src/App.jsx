@@ -6,8 +6,7 @@ import FaceRecognition from './components/FaceRecognition'
 import Rank from './components/Rank'
 import Login from './components/Login'
 import Signup from './components/Signup'
-import { baseApiEndpoint, callClarifaiApi, imageApi } from './utils/api'
-// APIs
+import { callClarifaiApi, imageApi } from './utils/api'
 
 function App() {
   const [input, setInput] = useState('')
@@ -49,46 +48,14 @@ function App() {
     setBoxes(box)
   }
   
-  // const returnClarafaiRequestOptions = (imageUrl) => {
-  //   const PAT = '377c93c35a8c4382979594bff49d0c24';//'22b8073894304dcba77964943fa77a37';
-  //   const USER_ID = 'yachuh';       
-  //   const APP_ID = 'react-face-detection';
-  //   const MODEL_ID = 'face-detection';
-  //   const IMAGE_URL = imageUrl;
-
-  //   const raw = JSON.stringify({
-  //       "user_app_id": {
-  //           "user_id": USER_ID,
-  //           "app_id": APP_ID
-  //       },
-  //       "inputs": [
-  //           {
-  //               "data": {
-  //                   "image": {
-  //                       "url": IMAGE_URL
-  //                   }
-  //               }
-  //           }
-  //       ]
-  //   });
-
-  //   const requestOptions = {
-  //       method: 'POST',
-  //       headers: {
-  //           'Accept': 'application/json',
-  //           'Authorization': 'Key ' + PAT
-  //       },
-  //       body: raw
-  //   };
-
-  //   return requestOptions
-  // }
-  
   const onInputChange = (e) => {
     setInput(e.target.value)
   }
 
   const onPictureSubmit = async () => {
+    if(!input){
+      return alert('Please enter image url')
+    }
     try {
       setImageUrl(input)
       // Call Clarifai Api
@@ -107,7 +74,6 @@ function App() {
     } catch (error) {
       console.log('error:::', error)
     }
-    
   }
 
   const onRouteChange = (route) => {
