@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { signupApi } from "../utils/api"
 import { useForm } from "react-hook-form";
 
