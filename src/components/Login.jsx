@@ -9,7 +9,7 @@ const Login = ({ onRouteChange, loadUser }) => {
 
   // React Hook Form
   const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm({
-    mode: 'onSubmit',
+    mode: 'onChange',
     defaultValues: {
       email:'',
       password:''
@@ -65,7 +65,7 @@ const Login = ({ onRouteChange, loadUser }) => {
                   required: "This is required.",
                   pattern: {
                     value: /\S+@\S+\.\S+/,
-                    message: "Entered value does not match email format"
+                    message: "Please enter a valid email address."
                   }
                 })}
               />

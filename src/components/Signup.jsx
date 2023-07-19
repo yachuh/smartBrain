@@ -8,6 +8,7 @@ const MySwal = withReactContent(Swal)
 const Signup = ({ onRouteChange, loadUser }) => {
   // React Hook Form
   const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm({
+    mode: 'onChange',
     defaultValues: {
       name:'',
       email:'',
@@ -82,7 +83,7 @@ const Signup = ({ onRouteChange, loadUser }) => {
                   required: "This is required.",
                   pattern: {
                     value: /\S+@\S+\.\S+/,
-                    message: "Entered value does not match email format"
+                    message: "Please enter a valid email address."
                   }
                 })}
               />
