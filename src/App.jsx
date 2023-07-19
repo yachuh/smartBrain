@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 // Components
 import Header from './components/Header'
 import ImageLinkForm from './components/ImageLinkForm'
@@ -6,7 +6,7 @@ import FaceRecognition from './components/FaceRecognition'
 import Rank from './components/Rank'
 import Login from './components/Login'
 import Signup from './components/Signup'
-import { callClarifaiApi, imageApi } from './utils/api'
+import { callClarifaiApi, submitImgApi } from './utils/api'
 
 function App() {
   const [input, setInput] = useState('')
@@ -28,9 +28,9 @@ function App() {
 
   const calculateFaceLocation = (data) => {
     const calafaiFaceBoxes = data.outputs[0].data.regions.map( box => box.region_info.bounding_box );
-    const image = document.getElementById('inputImage')
-    const width = Number(image.width);
-    const height = Number(image.height);
+    const imageElement = document.getElementById('inputImage')
+    const width = Number(imageElement.width);
+    const height = Number(imageElement.height);
 
     const newBoxes = calafaiFaceBoxes.map( box => {
       const newBox = {
@@ -69,7 +69,7 @@ function App() {
       const userId = {
         id: user.id
       }
-      const count = await imageApi(userId)
+      const count = await submitImgApi(userId)
       setUser({...user, entries: count})
     } catch (error) {
       console.log('error:::', error)
@@ -80,12 +80,13 @@ function App() {
     if(route === 'signin' || route === 'login'){
       setIsLoggedIn(false)
       setImageUrl('')
+      setInput('')
     } else if( route === 'home'){
       setIsLoggedIn(true)
     }
     setRoute(route)
   }
-
+  
   return (
     <>
       <Header onRouteChange={onRouteChange} isLoggedIn={isLoggedIn}/>
