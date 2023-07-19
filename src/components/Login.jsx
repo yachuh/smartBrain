@@ -1,27 +1,33 @@
 import { useState } from "react"
 import { loginApi } from "../utils/api"
+import { useForm } from "react-hook-form"
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
 
 const Login = ({ onRouteChange, loadUser }) => {
-  const [loginEmail, setLoginEmail] = useState('')
-  const [loginPassword, setLoginPassword] = useState('')
 
-  const onEmailChange = (e) => {
-    setLoginEmail(e.target.value)
-  }
-
-  const onPasswordChange = (e) => {
-    setLoginPassword(e.target.value)
-  }
-
-  const onLoginSubmit = async () => {
-    const loginData = {
-      email: loginEmail,
-      password: loginPassword
+  // React Hook Form
+  const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm({
+    mode: 'onSubmit',
+    defaultValues: {
+      email:'',
+      password:''
     }
+  });
+
+  const onLoginSubmit = async (data) => {
+    const loginData = data
     try {
       const { isSuccess, message, user } = await loginApi(loginData)
       if (!isSuccess) {
         console.log(message)
+        MySwal.fire({
+          title: 'Oops',
+          text: message,
+          icon: 'error'
+        })
         return
       }
       if (user.id) {
@@ -41,7 +47,7 @@ const Login = ({ onRouteChange, loadUser }) => {
             Log in to your account
           </h1>
           {/* Login Form */}
-          <div className="space-y-4 md:space-y-6">
+          <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onLoginSubmit)}>
             <div>
               <label
                 htmlFor="email"
@@ -56,8 +62,15 @@ const Login = ({ onRouteChange, loadUser }) => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@company.com"
                 required=""
-                onChange={(e) => onEmailChange(e) }
+                {...register("email", {
+                  required: "This is required.",
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Entered value does not match email format"
+                  }
+                })}
               />
+              <p className="text-red-400 text-xs mt-1">{errors.email?.message}</p>
             </div>
             <div>
               <label
@@ -73,16 +86,22 @@ const Login = ({ onRouteChange, loadUser }) => {
                 placeholder="••••••••"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required=""
-                onChange={(e) => {onPasswordChange(e)}}
+                {...register("password", {
+                  required: 'This is required.',
+                  minLength: {
+                    value: 6,
+                    message: 'Password should be at least 6 characters.'
+                  }
+                })}
               />
+              <p className="text-red-400 text-xs mt-1">{errors.password?.message}</p>
             </div>
-            <button
+            <input
               type="submit"
+              value="Login"
               className="w-full btn"
-              onClick={() => onLoginSubmit()}
-            >
-              Login
-            </button>
+              disabled={!isDirty || !isValid}
+            />
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet?{" "}
               <a
@@ -93,7 +112,7 @@ const Login = ({ onRouteChange, loadUser }) => {
                 Sign up
               </a>
             </p>
-          </div>
+          </form>
         </div>
       </div>
     </>

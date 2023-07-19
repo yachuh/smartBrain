@@ -1,24 +1,19 @@
-import { useState } from "react"
+import { useState } from "react";
 import { signupApi } from "../utils/api"
+import { useForm } from "react-hook-form";
 
 const Signup = ({ onRouteChange, loadUser }) => {
-  const [userData, setUserData] = useState({
-    name: '',
-    email: '',
-    password: ''
-  })
+  // React Hook Form
+  const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm({
+    defaultValues: {
+      name:'',
+      email:'',
+      password:''
+    }
+  });
 
-  const onNameChange = (e) => {
-    setUserData({...userData, name: e.target.value})
-  }
-  const onEmailChange = (e) => {
-    setUserData({...userData, email: e.target.value})
-  }
-  const onPasswordChange = (e) => {
-    setUserData({...userData, password: e.target.value})
-  }
-
-  const onSignupSubmit = async () => {
+  const onSignupSubmit = async (data) => {
+    const userData = data
     try {
       const { isSuccess, message, data} = await signupApi(userData)
       if (!isSuccess) {
@@ -40,7 +35,7 @@ const Signup = ({ onRouteChange, loadUser }) => {
             Sign up a new account
           </h1>
           {/* Login Form */}
-          <div className="space-y-4 md:space-y-6">
+          <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSignupSubmit)}>
             <div>
               <label
                 htmlFor="name"
@@ -55,8 +50,11 @@ const Signup = ({ onRouteChange, loadUser }) => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="John"
                 required=""
-                onChange={(e) => onNameChange(e)}
+                {...register("name", {
+                  required: "This is required.",
+                })}
               />
+              <p className="text-red-400 text-xs mt-1">{errors.name?.message}</p>
             </div>
             <div>
               <label
@@ -72,8 +70,15 @@ const Signup = ({ onRouteChange, loadUser }) => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@company.com"
                 required=""
-                onChange={(e) => onEmailChange(e)}
+                {...register("email", {
+                  required: "This is required.",
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Entered value does not match email format"
+                  }
+                })}
               />
+              <p className="text-red-400 text-xs mt-1">{errors.email?.message}</p>
             </div>
             <div>
               <label
@@ -89,16 +94,22 @@ const Signup = ({ onRouteChange, loadUser }) => {
                 placeholder="••••••••"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required=""
-                onChange={(e) => onPasswordChange(e)}
+                {...register("password", {
+                  required: 'This is required.',
+                  minLength: {
+                    value: 6,
+                    message: 'Password should be at least 6 characters.'
+                  }
+                })}
               />
+              <p className="text-red-400 text-xs mt-1">{errors.password?.message}</p>
             </div>
-            <button
+            <input
               type="submit"
+              value="Register"
               className="w-full btn"
-              onClick={() => onSignupSubmit() }
-            >
-              Register
-            </button>
+              disabled={!isDirty || !isValid}
+            />
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               Already have an account?{" "}
               <a
@@ -109,7 +120,7 @@ const Signup = ({ onRouteChange, loadUser }) => {
                 Login
               </a>
             </p>
-          </div>
+          </form>
         </div>
       </div>
     </>
