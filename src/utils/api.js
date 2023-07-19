@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const baseApiEndpoint = 'http://localhost:3000' //'https://smartbrain-api-1xik.onrender.com'
+export const baseApiEndpoint = 'https://smartbrain-api-1xik.onrender.com' // 'http://localhost:3000'//
 axios.defaults.baseURL = baseApiEndpoint
 
 // URLs
@@ -24,4 +24,4 @@ const putApi = async (url, payload) => {
 export const signupApi = (payload) => postApi(SIGNUP, payload)
 export const loginApi = (payload) => postApi(LOGIN, payload)
 export const callClarifaiApi = (payload) => postApi(CLARIFAI_API, payload)
-export const imageApi = (payload) => putApi(IMAGE, payload)
+export const submitImgApi = (payload) => putApi(IMAGE, payload)

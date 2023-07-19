@@ -15,12 +15,12 @@ const FaceRecognition = ({ imageUrl, boxes }) => {
         {/* Display FaceBox */}
         {
           boxes.map((box, i) => {
-            const { top,left, bottom,right } = box
+            const { top, left, bottom, right } = box
             const inlineStyle = {top: top, right: right, bottom:  bottom, left:left}
             return (
               <div 
                 key={i} 
-                className="absolute flex flex-wrap justify-center cursor-pointer shadow-[0_0_0_3px_#149df2]" 
+                className="absolute flex flex-wrap justify-center shadow-[0_0_0_3px_#149df2] hover:scale-110" 
                 style={inlineStyle}
               >
               </div>
