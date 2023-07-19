@@ -4,7 +4,6 @@ const Navigation = ({ onRouteChange, isLoggedIn }) => {
       {
         isLoggedIn 
         ? <div className="flex">
-            <a href="#" className="text-md underline py-2 px-4 mr-4" onClick={() => onRouteChange('profile')}>Profile</a>
             <a href="#" className="text-md underline py-2 px-4" onClick={() => onRouteChange('login')}>Logout</a>
           </div>
         : <div className="flex">

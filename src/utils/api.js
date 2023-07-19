@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const baseApiEndpoint = 'https://smartbrain-api-1xik.onrender.com' // 'http://localhost:3000'//
+export const baseApiEndpoint = 'https://smartbrain-api-1xik.onrender.com' //'http://localhost:3000'
 axios.defaults.baseURL = baseApiEndpoint
 
 // URLs
