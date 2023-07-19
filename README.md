@@ -8,9 +8,9 @@
 Demo: https://yachuh.github.io/smartBrain/
 
 ### 前端
-- 使用 Axios 串接 Clarafai API ，偵測並顯示圖片中的人臉
+- 使用 Axios 串接 Clarifai API ，偵測並顯示圖片中的人臉
 - 註冊、登入功能（含表單驗證與錯誤訊息提示）
-- RWD 網站，使用 TailwinCSS 開發，並客製化
+- RWD 網站，使用 TailwindCSS 開發
 
 ### 後端
 - 開發 RESTful API、實作資料庫 CRUD 語法
