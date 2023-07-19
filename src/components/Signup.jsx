@@ -1,5 +1,9 @@
 import { signupApi } from "../utils/api"
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
 
 const Signup = ({ onRouteChange, loadUser }) => {
   // React Hook Form
@@ -17,6 +21,11 @@ const Signup = ({ onRouteChange, loadUser }) => {
       const { isSuccess, message, data} = await signupApi(userData)
       if (!isSuccess) {
         console.log(message)
+        MySwal.fire({
+          title: 'Oops',
+          text: message,
+          icon: 'error'
+        })
         return
       }
       console.log(data)
